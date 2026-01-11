@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+
 type Post = {
   userId: number;
   id: number;
@@ -13,7 +15,33 @@ async function fetchPosts(): Promise<Post[]> {
 }
 
 export default function Home() {
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
+
+  if (isLoading)
+    return (
+      <p className="flex items-center justify-center mt-10"> Loading...</p>
+    );
+
+  if (isError)
+    return (
+      <p className="flex items-center justify-center mt-10">
+        {" "}
+        Error: {(error as Error).message}
+      </p>
+    );
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black"></div>
+    <div className="grid grid-rows-[20px_2fr_20px] items-center justify-items-center gap-6 font-sans dark:bg-black">
+      {data?.map((post) => (
+        <div key={post.id}>
+          {" "}
+          <p> Title: {post.title}</p>
+          <p> Body: {post.body}</p>{" "}
+        </div>
+      ))}
+    </div>
   );
 }
