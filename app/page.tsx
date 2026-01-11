@@ -38,7 +38,7 @@ export default function Home() {
       {data?.map((post) => (
         <div key={post.id}>
           {" "}
-          <p> Title: {post.title}</p>
+          <h4> Title: {post.title}</h4>
           <p> Body: {post.body}</p>{" "}
         </div>
       ))}
